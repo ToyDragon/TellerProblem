@@ -5,6 +5,7 @@ import java.util.Queue;
  * ThreadScheduler will contain a queue of customers and move them to open counters
  */
 public class ThreadScheduler extends WaitingThread{
+    final String TAG = "ThreadScheduler";
     int customerLimit;
 
     Queue<Customer> customerQueue;
@@ -22,11 +23,13 @@ public class ThreadScheduler extends WaitingThread{
             int openCounter = bank.getOpenCounterIndex();
 
             //If a customer is waiting, and a counter is open send him through!
-            if(customerQueue.size() > 0 && (openCounter != -1)){
+            if(customerQueue.size() > 0 && openCounter != -1){
+                bank.log(TAG,"Sending customer to counter "+openCounter+"...");
                 sendCustomer(customerQueue.poll(), openCounter);
             }
             //Otherwise wait for a notification (new customer or open counter
             else{
+                bank.log(TAG,"Waiting for counter to open or new customer to come...");
                 waitForNotification();
             }
         }
@@ -40,6 +43,6 @@ public class ThreadScheduler extends WaitingThread{
      */
     public void sendCustomer(Customer customer, int counterIndex){
         bank.threadCounters[counterIndex].acceptCustomer(customer);
-        bank.threadCounters[counterIndex].notify();
+        bank.notifyThread(bank.threadCounters[counterIndex]);
     }
 }

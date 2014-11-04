@@ -24,8 +24,8 @@ public class ThreadCreateCustomers extends WaitingThread{
                 if(putInQueue(newCustomer)) {
 
                     //notify the scheduler that it has a new customer
-                    bank.threadScheduler.notify();
                     bank.log(TAG,"Customer put into queue!");
+                    bank.notifyThread(bank.threadScheduler);
                 }else{
                     //we were notified at an incorrect time and the queue is full, this should never happen
                     //but we'll keep this here to find errors if they appear
@@ -33,6 +33,7 @@ public class ThreadCreateCustomers extends WaitingThread{
                 }
             }else{
                 bank.log(TAG,"Customer put into queue!");
+                bank.notifyThread(bank.threadScheduler);
             }
 
             //Sleep for a random amount of time before next customer

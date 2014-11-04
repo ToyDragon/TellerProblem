@@ -42,6 +42,12 @@ public class Bank {
         return isRunning;
     }
 
+    public void notifyThread(Thread thread){
+        synchronized(thread) {
+            thread.notify();
+        }
+    }
+
     /**
      * Used to find the next open counter that a customer can be sent to.
      * @return index of open counter in threadCounters array, or -1 if none found
