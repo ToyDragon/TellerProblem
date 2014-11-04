@@ -21,8 +21,16 @@ public class ThreadCreateCustomers extends WaitingThread{
                 waitForNotification();
                 if(putInQueue(newCustomer)) {
 
+                    //notify the scheduler that it has a new customer
+                    bank.threadScheduler.notify();
                     bank.log(TAG,"Customer put into queue!");
+                }else{
+                    //we were notified at an incorrect time and the queue is full, this should never happen
+                    //but we'll keep this here to find errors if they appear
+                    bank.log(TAG,"Cannot put customer in full queue!");
                 }
+            }else{
+                bank.log(TAG,"Waiting for queue to empty...");
             }
         }
     }
@@ -33,7 +41,12 @@ public class ThreadCreateCustomers extends WaitingThread{
      * @return true if successful
      */
     public boolean putInQueue(Customer customer){
-        return false;
+        //TODO: attempt to put the customer in the queue
+        if(bank.threadScheduler.customerQueue.size() >= bank.threadScheduler.customerLimit) return false;
+
+        bank.threadScheduler.customerQueue.add(customer);
+
+        return true;
     }
 
 }

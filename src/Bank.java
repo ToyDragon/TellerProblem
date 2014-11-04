@@ -10,12 +10,52 @@ public class Bank {
 
     ThreadCounter[] threadCounters;
 
-    public static void main(String[] args){}
+    public static void main(String[] args){ new Bank(); }
+
+    public Bank(){
+        threadCreateCustomers = new ThreadCreateCustomers(this);
+        threadScheduler = new ThreadScheduler(this);
+
+        int amtCounters = 3;
+
+        threadCounters = new ThreadCounter[amtCounters];
+        for(int i = 0; i < amtCounters; i++){
+            threadCounters[i] = new ThreadCounter(this);
+        }
+
+        isRunning = true;
+
+        //start counters first, so they wait for customers
+        for(int i = 0; i < amtCounters; i++) {
+            threadCounters[i].start();
+        }
+
+        //start scheduler second, so it is waiting for the queue to populate to send to counters
+        threadScheduler.start();
+
+        //start the create customers thread last to send customers into the now open for business bank
+        threadCreateCustomers.start();
+
+    }
 
     public boolean getRunning(){
         return isRunning;
     }
 
+    /**
+     * Used to find the next open counter that a customer can be sent to.
+     * @return index of open counter in threadCounters array, or -1 if none found
+     */
+    public int getOpenCounterIndex(){
+        //TODO: return the index of an open counter, or -1 if non exist
+        return -1;
+    }
+
+    /**
+     * Used to have a standardized logging system with tags
+     * @param tag Super-label of the message being logged, usually class name
+     * @param message message to be logged
+     */
     public void log(String tag, String message){
         System.out.println("["+tag+"]: "+message);
     }
