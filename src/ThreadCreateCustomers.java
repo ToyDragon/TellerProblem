@@ -3,6 +3,7 @@
  */
 public class ThreadCreateCustomers extends WaitingThread{
     final String TAG = "ThreadCreateCustomers";
+    final int customerGenerationTime=3000, customerGenerationVariance=1500;
 
     Bank bank;
 
@@ -18,6 +19,7 @@ public class ThreadCreateCustomers extends WaitingThread{
             if (!putInQueue(newCustomer)) {
 
                 //If we couldn't put this customer in the queue, wait until the queue has space
+                bank.log(TAG,"Waiting for queue to empty...");
                 waitForNotification();
                 if(putInQueue(newCustomer)) {
 
@@ -30,8 +32,13 @@ public class ThreadCreateCustomers extends WaitingThread{
                     bank.log(TAG,"Cannot put customer in full queue!");
                 }
             }else{
-                bank.log(TAG,"Waiting for queue to empty...");
+                bank.log(TAG,"Customer put into queue!");
             }
+
+            //Sleep for a random amount of time before next customer
+            try{
+                sleep(customerGenerationTime + (int)(Math.random()*customerGenerationVariance));
+            }catch (InterruptedException e){}//We will never interrupt this sleep call
         }
     }
 
@@ -41,7 +48,6 @@ public class ThreadCreateCustomers extends WaitingThread{
      * @return true if successful
      */
     public boolean putInQueue(Customer customer){
-        //TODO: attempt to put the customer in the queue
         if(bank.threadScheduler.customerQueue.size() >= bank.threadScheduler.customerLimit) return false;
 
         bank.threadScheduler.customerQueue.add(customer);
