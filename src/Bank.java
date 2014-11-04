@@ -16,4 +16,7 @@ public class Bank {
         return isRunning;
     }
 
+    public void log(String tag, String message){
+        System.out.println("["+tag+"]: "+message);
+    }
 }
