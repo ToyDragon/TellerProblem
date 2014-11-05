@@ -10,7 +10,7 @@ public class ThreadCounter extends Thread{
 
     public void run(){
         while(bank.getRunning()){
-
+            //TODO: if there is a customer handle him, then clean up and wait/notify the scheduler
         }
     }
 

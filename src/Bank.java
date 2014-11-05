@@ -42,9 +42,13 @@ public class Bank {
         return isRunning;
     }
 
+    /**
+     * Notifies the specified thread in a synchronized block
+     * @param thread thread to be notified
+     */
     public void notifyThread(Thread thread){
         synchronized(thread) {
-            thread.notify();
+            thread.notifyAll();
         }
     }
 
