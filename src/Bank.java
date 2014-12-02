@@ -57,7 +57,10 @@ public class Bank {
      * @return index of open counter in threadCounters array, or -1 if none found
      */
     public int getOpenCounterIndex(){
-        //TODO: return the index of an open counter, or -1 if non exist
+        for(int i = 0; i < threadCounters.length; i++)
+            if(!threadCounters[i].isBusy())
+                return i;
+            //TODO: return the index of an open counter, or -1 if non exist
         return -1;
     }
 
