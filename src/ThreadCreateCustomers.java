@@ -23,8 +23,8 @@ public class ThreadCreateCustomers extends WaitingThread{
                 bank.log(TAG,"Waiting for queue to empty...");
                 waitForNotification();
                 if(putInQueue(newCustomer)) {
-
                     //notify the scheduler that it has a new customer
+                    newCustomer.inLine();
                     bank.log(TAG,"Customer put into queue!");
                     bank.notifyThread(bank.threadScheduler);
                 }else{
@@ -33,6 +33,7 @@ public class ThreadCreateCustomers extends WaitingThread{
                     bank.log(TAG,"Cannot put customer in full queue!");
                 }
             }else{
+                newCustomer.inLine();
                 bank.log(TAG,"Customer put into queue!");
                 bank.notifyThread(bank.threadScheduler);
             }

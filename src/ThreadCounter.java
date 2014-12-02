@@ -2,7 +2,9 @@
  * ThreadCounter will handle a single customer at a time, and signal the scheduler when done
  */
 public class ThreadCounter extends Thread{
+    final String TAG = "ThreadCounter";
     Bank bank;
+    int tellerId;
     Customer customer;
     Boolean busy;
 
@@ -26,6 +28,18 @@ public class ThreadCounter extends Thread{
         this.busy = true;
         this.customer = customer;
         this.customer.outOfLine();
+        this.customer.setWaitTime();
         //TODO: mark this counter as inaccessible and store the customer for processing in run()
+    }
+
+    public void serviceCustomer(){
+        if(this.customer != null){
+            bank.log(TAG + this.tellerId, "Servicing customer " + this.customer.getId() + "!");
+            this.customer = null;
+        }
+
+        else{
+            bank.log(TAG + this.tellerId, "No customer to be serviced!");
+        }
     }
 }

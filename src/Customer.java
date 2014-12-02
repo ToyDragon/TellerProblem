@@ -11,6 +11,10 @@ public class Customer{
         this.inTime = this.outTime = this.waitTime = 0;
     }
 
+    public int getId(){
+        return this.id;
+    }
+
     public void inLine(){
         this.inTime = System.currentTimeMillis();
     }
