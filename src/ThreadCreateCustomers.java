@@ -12,10 +12,11 @@ public class ThreadCreateCustomers extends WaitingThread{
     }
 
     public void run() {
+        int id = 0;
         while (bank.getRunning()) {
 
             //create a new customer and attempt to add them to the queue
-            Customer newCustomer = new Customer();
+            Customer newCustomer = new Customer(id++);
             if (!putInQueue(newCustomer)) {
 
                 //If we couldn't put this customer in the queue, wait until the queue has space

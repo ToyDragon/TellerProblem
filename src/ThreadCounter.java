@@ -25,6 +25,7 @@ public class ThreadCounter extends Thread{
     public void acceptCustomer(Customer customer){
         this.busy = true;
         this.customer = customer;
+        this.customer.outOfLine();
         //TODO: mark this counter as inaccessible and store the customer for processing in run()
     }
 }
