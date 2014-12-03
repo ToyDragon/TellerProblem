@@ -16,12 +16,26 @@ public class ThreadCounter extends Thread{
 
     public void run(){
         while(bank.getRunning()){
+            try {
+                if (hasCustomer())
+                    serviceCustomer();
+                else
+                    wait();
+            } catch(InterruptedException e) {
+            } catch(IllegalMonitorStateException e){
+            }
             //TODO: if there is a customer handle him, then clean up and wait/notify the scheduler
         }
     }
 
     public boolean isBusy(){
         return this.busy;
+    }
+
+    public boolean hasCustomer(){
+        if(this.customer != null)
+            return true;
+        return false;
     }
 
     public void acceptCustomer(Customer customer){
@@ -35,9 +49,10 @@ public class ThreadCounter extends Thread{
     public void serviceCustomer(){
         if(this.customer != null){
             bank.log(TAG + this.tellerId, "Servicing customer " + this.customer.getId() + "!");
+            bank.log(TAG + this.tellerId, "Customer " + this.customer.getId() + " has been serviced!");
+            this.busy = false;
             this.customer = null;
         }
-
         else{
             bank.log(TAG + this.tellerId, "No customer to be serviced!");
         }
