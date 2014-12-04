@@ -2,16 +2,16 @@
  * ThreadCounter will handle a single customer at a time, and signal the scheduler when done
  */
 public class ThreadCounter extends Thread{
-    final String TAG = "ThreadCounter";
-    Bank bank;
-    int tellerId;
-    Customer customer;
-    Boolean busy;
+    private final String TAG = "ThreadCounter";
+    private final int serviceTimeAverage = 5000, serviceTimeVariance = 10000;
+    private Bank bank;
+    private int tellerId;
+    private Customer customer;
 
-    public ThreadCounter(Bank bank){
+    public ThreadCounter(Bank bank, int tellerId){
         this.bank = bank;
         this.customer = null;
-        this.busy = false;
+        this.tellerId = tellerId;
     }
 
     public void run(){
@@ -28,33 +28,59 @@ public class ThreadCounter extends Thread{
         }
     }
 
-    public boolean isBusy(){
-        return this.busy;
-    }
-
+    /**
+     * Returns current status of the counter/teller.
+     * @return true if counter/teller has a customer
+     */
     public boolean hasCustomer(){
         if(this.customer != null)
             return true;
         return false;
     }
 
+    /**
+     * Attempts to accept a customer at this counter/teller.
+     * @param customer customer to be accepted at this counter/teller
+     */
     public void acceptCustomer(Customer customer){
-        this.busy = true;
-        this.customer = customer;
-        this.customer.outOfLine();
-        this.customer.setWaitTime();
-        //TODO: mark this counter as inaccessible and store the customer for processing in run()
+        if(this.customer == null) {
+            this.customer = customer;
+            this.customer.outOfLine();
+            this.customer.setWaitTime();
+            bank.log(TAG + this, "Customer " + customer + "has been accepted by counter " + this + "!");
+        }else{
+            bank.log(TAG + this, "Counter " + this + " currently has a customer!");
+        }
     }
 
+    /**
+     * Services the current customer for [5, 15] seconds at this counter/teller then ends transaction.
+     */
     public void serviceCustomer(){
-        if(this.customer != null){
-            bank.log(TAG + this.tellerId, "Servicing customer " + this.customer.getId() + "!");
-            bank.log(TAG + this.tellerId, "Customer " + this.customer.getId() + " has been serviced!");
-            this.busy = false;
-            this.customer = null;
+        if (this.customer != null) {
+            bank.log(TAG + this, "Servicing customer " + this.customer + " at counter " + this + "!");
+            try {
+                sleep(serviceTimeAverage + (int) (Math.random() * serviceTimeVariance));
+            }catch(InterruptedException e){}
+            bank.log(TAG + this, "Customer " + this.customer + " has been serviced at counter " + this +"!");
+            endTransaction();
+        } else {
+            bank.log(TAG + this, "No customer to be serviced at counter " + this + "!");
         }
-        else{
-            bank.log(TAG + this.tellerId, "No customer to be serviced!");
-        }
+    }
+
+    /**
+     * Discharges the current customer after a transaction has been completed.
+     */
+    public void endTransaction(){
+        this.customer = null;
+    }
+
+    /**
+     * Returns this counter/teller id.
+     * @return tellerId
+     */
+    public String toString(){
+        return "" + this.tellerId;
     }
 }

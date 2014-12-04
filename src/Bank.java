@@ -20,7 +20,7 @@ public class Bank {
 
         threadCounters = new ThreadCounter[amtCounters];
         for(int i = 0; i < amtCounters; i++){
-            threadCounters[i] = new ThreadCounter(this);
+            threadCounters[i] = new ThreadCounter(this, i);
         }
 
         isRunning = true;
@@ -58,7 +58,7 @@ public class Bank {
      */
     public int getOpenCounterIndex(){
         for(int i = 0; i < threadCounters.length; i++)
-            if(!threadCounters[i].isBusy())
+            if(!threadCounters[i].hasCustomer())
                 return i;
         return -1;
     }

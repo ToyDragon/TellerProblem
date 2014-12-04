@@ -11,22 +11,40 @@ public class Customer{
         this.inTime = this.outTime = this.waitTime = 0;
     }
 
-    public int getId(){
-        return this.id;
-    }
-
+    /**
+     * Records the time at which the customer was put into the queue.
+     */
     public void inLine(){
         this.inTime = System.currentTimeMillis();
     }
 
+    /**
+     * Records the time at which the customer was sent to a counter.
+     */
     public void outOfLine(){
         this.outTime = System.currentTimeMillis();
     }
 
+    /**
+     * Records the time the customer spent waiting in the queue.
+     */
     public void setWaitTime(){
         this.waitTime = this.outTime - this.inTime;
     }
+
+    /**
+     * Returns the customer's wait time.
+     * @return waitTime
+     */
     public long getWaitTime(){
         return this.waitTime;
+    }
+
+    /**
+     * Returns the customer's id.
+     * @return id
+     */
+    public String toString(){
+        return "" + this.id;
     }
 }

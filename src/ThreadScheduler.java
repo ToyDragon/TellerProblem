@@ -5,11 +5,11 @@ import java.util.Queue;
  * ThreadScheduler will contain a queue of customers and move them to open counters
  */
 public class ThreadScheduler extends WaitingThread{
-    final String TAG = "ThreadScheduler";
-    int customerLimit;
+    private final String TAG = "ThreadScheduler";
+    private int customerLimit;
 
-    Queue<Customer> customerQueue;
-    Bank bank;
+    private Queue<Customer> customerQueue;
+    private Bank bank;
 
     public ThreadScheduler(Bank bank){
         this.bank = bank;
@@ -24,15 +24,23 @@ public class ThreadScheduler extends WaitingThread{
 
             //If a customer is waiting, and a counter is open send him through!
             if(customerQueue.size() > 0 && openCounter != -1){
-                bank.log(TAG,"Sending customer to counter "+openCounter+"...");
+                bank.log(TAG, "Sending customer " + customerQueue.peek() + " to counter " + openCounter + "...");
                 sendCustomer(customerQueue.poll(), openCounter);
             }
             //Otherwise wait for a notification (new customer or open counter
             else{
-                bank.log(TAG,"Waiting for counter to open or new customer to come...");
+                bank.log(TAG, "Waiting for counter to open or new customer to come...");
                 waitForNotification();
             }
         }
+    }
+
+    /**
+     * Adds a customer to the queue.
+     * @param customer customer to be added into queue
+     */
+    public void addCustomer(Customer customer){
+        this.customerQueue.add(customer);
     }
 
     /**
@@ -44,5 +52,21 @@ public class ThreadScheduler extends WaitingThread{
     public void sendCustomer(Customer customer, int counterIndex){
         bank.threadCounters[counterIndex].acceptCustomer(customer);
         bank.notifyThread(bank.threadCounters[counterIndex]);
+    }
+
+    /**
+     * Returns the current queue size.
+     * @return current size of queue
+     */
+    public int getQueueSize(){
+        return this.customerQueue.size();
+    }
+
+    /**
+     * Returns the limit of the amount of customers in the queue.
+     * @return customer limit
+     */
+    public int getCustomerLimit(){
+        return this.customerLimit;
     }
 }

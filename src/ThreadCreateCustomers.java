@@ -2,10 +2,10 @@
  * ThreadCreateCustomers will continuously create new customers to put into the queue in ThreadScheduler
  */
 public class ThreadCreateCustomers extends WaitingThread{
-    final String TAG = "ThreadCreateCustomers";
-    final int customerGenerationTime=3000, customerGenerationVariance=1500;
+    private final String TAG = "ThreadCreateCustomers";
+    private final int customerGenerationTime = 3000, customerGenerationVariance = 1500;
 
-    Bank bank;
+    private Bank bank;
 
     public ThreadCreateCustomers(Bank bank){
         this.bank = bank;
@@ -25,23 +25,23 @@ public class ThreadCreateCustomers extends WaitingThread{
                 if(putInQueue(newCustomer)) {
                     //notify the scheduler that it has a new customer
                     newCustomer.inLine();
-                    bank.log(TAG,"Customer put into queue!");
+                    bank.log(TAG,"Customer " + newCustomer + " put into queue!");
                     bank.notifyThread(bank.threadScheduler);
                 }else{
                     //we were notified at an incorrect time and the queue is full, this should never happen
                     //but we'll keep this here to find errors if they appear
-                    bank.log(TAG,"Cannot put customer in full queue!");
+                    bank.log(TAG,"Cannot put customer " + newCustomer + " in full queue!");
                 }
             }else{
                 newCustomer.inLine();
-                bank.log(TAG,"Customer put into queue!");
+                bank.log(TAG,"Customer " + newCustomer + " put into queue!");
                 bank.notifyThread(bank.threadScheduler);
             }
 
             //Sleep for a random amount of time before next customer
             try{
                 sleep(customerGenerationTime + (int)(Math.random()*customerGenerationVariance));
-            }catch (InterruptedException e){}//We will never interrupt this sleep call
+            }catch(InterruptedException e){}//We will never interrupt this sleep call
         }
     }
 
@@ -51,9 +51,9 @@ public class ThreadCreateCustomers extends WaitingThread{
      * @return true if successful
      */
     public boolean putInQueue(Customer customer){
-        if(bank.threadScheduler.customerQueue.size() >= bank.threadScheduler.customerLimit) return false;
+        if(bank.threadScheduler.getQueueSize() >= bank.threadScheduler.getCustomerLimit()) return false;
 
-        bank.threadScheduler.customerQueue.add(customer);
+        bank.threadScheduler.addCustomer(customer);
 
         return true;
     }
