@@ -1,6 +1,11 @@
 *.class
+<<<<<<< HEAD
 workspace.xml
+=======
+>>>>>>> 407bab70954640d49c66f368f3e4f27cf69718ae
 *.iml
+
+.idea/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
