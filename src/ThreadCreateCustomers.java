@@ -41,13 +41,13 @@ public class ThreadCreateCustomers extends WaitingThread{
             //Sleep for a random amount of time before next customer
             try{
                 sleep(customerGenerationTime + (int)(Math.random()*customerGenerationVariance));
-            }catch(InterruptedException e){}//We will never interrupt this sleep call
+            }catch(InterruptedException ignored){}//We will never interrupt this sleep call
         }
     }
 
     /**
      * Attempt to place the customer in the queue of ThreadScheduler.
-     * @param customer
+     * @param customer customer to be placed into queue
      * @return true if successful
      */
     public boolean putInQueue(Customer customer){

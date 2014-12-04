@@ -21,8 +21,8 @@ public class ThreadCounter extends Thread{
                     serviceCustomer();
                 else
                     wait();
-            } catch(InterruptedException e) {
-            } catch(IllegalMonitorStateException e){
+            } catch(InterruptedException ignored) {
+            } catch(IllegalMonitorStateException ignored){
             }
         }
     }
@@ -32,9 +32,7 @@ public class ThreadCounter extends Thread{
      * @return true if counter/teller has a customer
      */
     public boolean hasCustomer(){
-        if(this.customer != null)
-            return true;
-        return false;
+        return this.customer != null;
     }
 
     /**
@@ -63,7 +61,7 @@ public class ThreadCounter extends Thread{
                 long serviceTime = serviceTimeAverage + (int) (Math.random() * serviceTimeVariance);
                 sleep(serviceTime);
                 this.customer.setServiceTime(serviceTime);
-            }catch(InterruptedException e){}
+            }catch(InterruptedException ignored){}
             bank.log(TAG + this, "Customer " + this.customer + " has been serviced at counter " + this +"! cust" +
                     customer + " service time: " + customer.getServiceTime());
             endTransaction();
