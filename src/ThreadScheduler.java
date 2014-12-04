@@ -1,5 +1,6 @@
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * ThreadScheduler will contain a queue of customers and move them to open counters
@@ -15,7 +16,7 @@ public class ThreadScheduler extends WaitingThread{
         this.bank = bank;
 
         customerLimit = 20;
-        customerQueue = new LinkedList<Customer>();
+        customerQueue = new ConcurrentLinkedQueue<Customer>();
     }
 
     public void run(){
@@ -23,9 +24,10 @@ public class ThreadScheduler extends WaitingThread{
             int openCounter = bank.getOpenCounterIndex();
 
             //If a customer is waiting, and a counter is open send him through!
-            if(customerQueue.size() > 0 && openCounter != -1){
-                bank.log(TAG, "Sending customer " + customerQueue.peek() + " to counter " + openCounter + "...");
-                sendCustomer(customerQueue.poll(), openCounter);
+            if(!customerQueue.isEmpty() && openCounter != -1){
+                Customer newCustomer = customerQueue.poll();
+                bank.log(TAG, "Sending customer " + newCustomer + " to counter " + openCounter + "...");
+                sendCustomer(newCustomer, openCounter);
             }
             //Otherwise wait for a notification (new customer or open counter
             else{
@@ -40,7 +42,7 @@ public class ThreadScheduler extends WaitingThread{
      * @param customer customer to be added into queue
      */
     public void addCustomer(Customer customer){
-        this.customerQueue.add(customer);
+        customerQueue.offer(customer);
     }
 
     /**

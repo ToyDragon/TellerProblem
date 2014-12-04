@@ -1,9 +1,11 @@
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * The Bank class will be the main class of the project and house instances of all classes used in the project
  */
 public class Bank {
 
-    boolean isRunning;
+    AtomicBoolean isRunning;
 
     ThreadCreateCustomers threadCreateCustomers;
     ThreadScheduler threadScheduler;
@@ -23,7 +25,7 @@ public class Bank {
             threadCounters[i] = new ThreadCounter(this, i);
         }
 
-        isRunning = true;
+        isRunning = new AtomicBoolean(true);
 
         //start counters first, so they wait for customers
         for(int i = 0; i < amtCounters; i++) {
@@ -39,7 +41,7 @@ public class Bank {
     }
 
     public boolean getRunning(){
-        return isRunning;
+        return isRunning.get();
     }
 
     /**
