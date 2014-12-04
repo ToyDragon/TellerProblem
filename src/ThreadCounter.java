@@ -24,7 +24,6 @@ public class ThreadCounter extends Thread{
             } catch(InterruptedException e) {
             } catch(IllegalMonitorStateException e){
             }
-            //TODO: if there is a customer handle him, then clean up and wait/notify the scheduler
         }
     }
 
@@ -47,7 +46,8 @@ public class ThreadCounter extends Thread{
             this.customer = customer;
             this.customer.outOfLine();
             this.customer.setWaitTime();
-            bank.log(TAG + this, "Customer " + customer + " has been accepted by counter " + this + "!");
+            bank.log(TAG + this, "Customer " + customer + " has been accepted by counter " + this + "! cust" +
+                    customer + " wait time: " + customer.getWaitTime());
         }else{
             bank.log(TAG + this, "Counter " + this + " currently has a customer!");
         }
@@ -60,9 +60,12 @@ public class ThreadCounter extends Thread{
         if (this.customer != null) {
             bank.log(TAG + this, "Servicing customer " + this.customer + " at counter " + this + "!");
             try {
-                sleep(serviceTimeAverage + (int) (Math.random() * serviceTimeVariance));
+                long serviceTime = serviceTimeAverage + (int) (Math.random() * serviceTimeVariance);
+                sleep(serviceTime);
+                this.customer.setServiceTime(serviceTime);
             }catch(InterruptedException e){}
-            bank.log(TAG + this, "Customer " + this.customer + " has been serviced at counter " + this +"!");
+            bank.log(TAG + this, "Customer " + this.customer + " has been serviced at counter " + this +"! cust" +
+                    customer + " service time: " + customer.getServiceTime());
             endTransaction();
         } else {
             bank.log(TAG + this, "No customer to be serviced at counter " + this + "!");
