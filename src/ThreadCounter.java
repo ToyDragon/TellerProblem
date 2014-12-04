@@ -47,7 +47,7 @@ public class ThreadCounter extends Thread{
             this.customer = customer;
             this.customer.outOfLine();
             this.customer.setWaitTime();
-            bank.log(TAG + this, "Customer " + customer + "has been accepted by counter " + this + "!");
+            bank.log(TAG + this, "Customer " + customer + " has been accepted by counter " + this + "!");
         }else{
             bank.log(TAG + this, "Counter " + this + " currently has a customer!");
         }
