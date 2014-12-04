@@ -4,11 +4,11 @@
  */
 public class Customer{
     private int id;
-    private long inTime, outTime, waitTime;
+    private long inTime, outTime, waitTime, serviceTime;
 
     public Customer(int id){
         this.id = id;
-        this.inTime = this.outTime = this.waitTime = 0;
+        this.inTime = this.outTime = this.waitTime = serviceTime = 0;
     }
 
     /**
@@ -40,6 +40,21 @@ public class Customer{
         return this.waitTime;
     }
 
+    /**
+     * Sets the customer's service time after being serviced by a counter/teller.
+     * @param serviceTime time it took to service the customer
+     */
+    public void setServiceTime(long serviceTime){
+        this.serviceTime = serviceTime;
+    }
+
+    /**
+     * Returns the amount of time it took for the customer to be serviced by the counter/teller.
+     * @return serviceTime
+     */
+    public long getServiceTime(){
+        return this.serviceTime;
+    }
     /**
      * Returns the customer's id.
      * @return id
