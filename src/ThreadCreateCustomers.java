@@ -3,7 +3,7 @@
  */
 public class ThreadCreateCustomers extends WaitingThread{
     private final String TAG = "ThreadCreateCustomers";
-    private final int customerGenerationTime = 3000, customerGenerationVariance = 1500;
+    private final int customerGenerationTime = 1000, customerGenerationVariance = 500;
 
     private Bank bank;
 

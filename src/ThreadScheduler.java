@@ -52,6 +52,7 @@ public class ThreadScheduler extends WaitingThread{
     public void sendCustomer(Customer customer, int counterIndex){
         bank.threadCounters[counterIndex].acceptCustomer(customer);
         bank.notifyThread(bank.threadCounters[counterIndex]);
+        bank.notifyThread(bank.threadCreateCustomers);
     }
 
     /**

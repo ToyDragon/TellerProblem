@@ -74,6 +74,7 @@ public class ThreadCounter extends Thread{
      */
     public void endTransaction(){
         this.customer = null;
+        bank.notifyThread(bank.threadScheduler);
     }
 
     /**
