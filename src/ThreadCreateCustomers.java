@@ -1,4 +1,6 @@
 /**
+ * Authors: Matt Bates and Gerard Briones
+ *
  * ThreadCreateCustomers will continuously create new customers to put into the queue in ThreadScheduler
  */
 public class ThreadCreateCustomers extends WaitingThread{

@@ -1,10 +1,11 @@
-import java.util.LinkedList;
+/**
+ * Authors: Matt Bates and Gerard Briones
+ *
+ * ThreadScheduler will contain a queue of customers and move them to open counters
+ */
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-/**
- * ThreadScheduler will contain a queue of customers and move them to open counters
- */
 public class ThreadScheduler extends WaitingThread{
     private final String TAG = "ThreadScheduler";
     private int customerLimit;

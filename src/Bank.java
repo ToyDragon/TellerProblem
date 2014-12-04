@@ -1,8 +1,10 @@
-import java.util.concurrent.atomic.AtomicBoolean;
-
 /**
+ * Authors: Matt Bates and Gerard Briones
+ *
  * The Bank class will be the main class of the project and house instances of all classes used in the project
  */
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class Bank {
 
     AtomicBoolean isRunning;

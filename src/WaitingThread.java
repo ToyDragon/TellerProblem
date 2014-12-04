@@ -1,4 +1,6 @@
 /**
+ * Authors: Matt Bates and Gerard Briones
+ *
  * All this class does is provide the helper method waitForNotification()
  */
 public class WaitingThread extends Thread {
